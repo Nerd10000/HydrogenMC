@@ -1,0 +1,45 @@
+<configuration>
+
+    <!-- Register custom color converter -->
+    <conversionRule conversionWord="levelColor" converterClass="dragon.me.HydrogenServer.utils.LevelColorConverter" />
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                    %d{HH:mm:ss} %cyan(Hydrogen |) %gray([%thread]) %levelColor %green(%-12.12logger) - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+      <!-- ========== File output (saves everything, but user won’t see it) ========== -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/runtime.log</file>
+
+        <!-- Rotate daily -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/runtime-%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>14</maxHistory> <!-- keep 14 days -->
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+
+    <!-- Root logger now logs to console and file -->
+    <root level="info">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="FILE" />
+    </root>
+
+    <!-- Performance logger only logs to performance-details.log -->
+    <logger name="dragon.me.HydrogenServer.utils.PerformanceLogger" level="info" additivity="false">
+        <appender-ref ref="PERFORMANCE" />
+    </logger>
+
+</configuration>
